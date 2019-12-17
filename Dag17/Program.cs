@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Dag17
@@ -7,6 +8,7 @@ namespace Dag17
     {
         static void Main(string[] args)
         {
+            var stopwatch = Stopwatch.StartNew();
             var squareNumbers = 0;
 
             foreach (var triangularNumber in Enumerable.Range(0, 1000000).Select(a => (long)a * (a + 1) / 2))
@@ -19,7 +21,7 @@ namespace Dag17
 
                 var numberString = triangularNumber.ToString();
 
-                for (int i = 0; i < numberString.Length; i++)
+                for (int i = 1; i < numberString.Length; i++)
                 {
                     numberString = new string(numberString[^1] + numberString[..^1]);
                     if (Math.Abs(Math.Sqrt(long.Parse(numberString)) % 1) <= (double.Epsilon * 100))
@@ -30,7 +32,9 @@ namespace Dag17
                 }
             }
 
+            stopwatch.Stop();
             Console.WriteLine(squareNumbers);
+            Console.WriteLine(stopwatch.ElapsedMilliseconds);
         }
     }
 }
