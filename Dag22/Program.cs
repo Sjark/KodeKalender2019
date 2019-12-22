@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -8,37 +9,38 @@ namespace Dag22
     {
         static void Main(string[] args)
         {
-            var trees = File.ReadAllLines("Input\\forest.txt");
+            Stopwatch timer = Stopwatch.StartNew();
+            for (int i = 0; i < 1000; i++)
+                if (Solve() != 6537400) Console.WriteLine("Error");
 
-            var treeIndexes = trees[^1].Select((a, i) => a == '#' ? i : -1).Where(a => a != -1).ToArray();
+            Console.WriteLine(timer.ElapsedMilliseconds);
+        }
+
+        private static int Solve()
+        {
+            var trees = File.ReadAllLines("Input\\forest.txt");
 
             var totalHeight = 0;
 
-            foreach (var index in treeIndexes)
+            for (int i = 0; i < trees[^1].Length; i++)
             {
-                var currentPart = 1;
-                var treeHeight = 0;
-
-                while (true && currentPart <= trees.Length)
+                if (trees[^1][i] != '#')
                 {
-                    var currentTreePart = trees[^currentPart][index];
+                    continue;
+                }
 
-                    if (currentTreePart == '#')
-                    {
-                        treeHeight += 20;
-                    }
-                    else
+                for (int y = 1; y <= trees.Length; y++)
+                {
+                    if (trees[^y][i] == ' ')
                     {
                         break;
                     }
 
-                    currentPart += 1;
+                    totalHeight += 20;
                 }
-
-                totalHeight += treeHeight;
             }
 
-            Console.WriteLine(totalHeight / 100.0 * 200);
+            return (int)(totalHeight / 100.0 * 200);
         }
     }
 }
